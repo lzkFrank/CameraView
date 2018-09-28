@@ -34,15 +34,15 @@ public class CaptureButton extends View {
     private int state;              //当前按钮状态
     private int button_state;       //按钮可执行的功能状态（拍照,录制,两者）
 
-    public static final int STATE_IDLE = 0x001;        //空闲状态
-    public static final int STATE_PRESS = 0x002;       //按下状态
-    public static final int STATE_LONG_PRESS = 0x003;  //长按状态
+    public static final int STATE_IDLE        = 0x001;        //空闲状态
+    public static final int STATE_PRESS       = 0x002;       //按下状态
+    public static final int STATE_LONG_PRESS  = 0x003;  //长按状态
     public static final int STATE_RECORDERING = 0x004; //录制状态
-    public static final int STATE_BAN = 0x005;         //禁止状态
+    public static final int STATE_BAN         = 0x005;         //禁止状态
 
     private int progress_color = 0xEE16AE16;            //进度条颜色
-    private int outside_color = 0xEEDCDCDC;             //外圆背景色
-    private int inside_color = 0xFFFFFFFF;              //内圆背景色
+    private int outside_color  = 0xEEDCDCDC;             //外圆背景色
+    private int inside_color   = 0xFFFFFFFF;              //内圆背景色
 
 
     private float event_Y;  //Touch_Event_Down时候记录的Y值
@@ -51,8 +51,8 @@ public class CaptureButton extends View {
     private Paint mPaint;
 
     private float strokeWidth;          //进度条宽度
-    private int outside_add_size;       //长按外圆半径变大的Size
-    private int inside_reduce_size;     //长安内圆缩小的Size
+    private int   outside_add_size;       //长按外圆半径变大的Size
+    private int   inside_reduce_size;     //长安内圆缩小的Size
 
     //中心坐标
     private float center_X;
@@ -61,17 +61,17 @@ public class CaptureButton extends View {
     private float button_radius;            //按钮半径
     private float button_outside_radius;    //外圆半径
     private float button_inside_radius;     //内圆半径
-    private int button_size;                //按钮大小
+    private int   button_size;                //按钮大小
 
     private float progress;         //录制视频的进度
-    private int duration;           //录制视频最大时间长度
-    private int min_duration;       //最短录制时间限制
-    private int recorded_time;      //记录当前录制的时间
+    private int   duration;           //录制视频最大时间长度
+    private int   min_duration;       //最短录制时间限制
+    private int   recorded_time;      //记录当前录制的时间
 
     private RectF rectF;
 
-    private LongPressRunnable longPressRunnable;    //长按后处理的逻辑Runnable
-    private CaptureListener captureLisenter;        //按钮回调接口
+    private LongPressRunnable    longPressRunnable;    //长按后处理的逻辑Runnable
+    private CaptureListener      captureLisenter;        //按钮回调接口
     private RecordCountDownTimer timer;             //计时器
 
     public CaptureButton(Context context) {
@@ -153,8 +153,11 @@ public class CaptureButton extends View {
                 state = STATE_PRESS;        //修改当前状态为点击按下
 
                 //判断按钮状态是否为可录制状态
-                if ((button_state == BUTTON_STATE_ONLY_RECORDER || button_state == BUTTON_STATE_BOTH))
+                if (button_state == BUTTON_STATE_BOTH) {
                     postDelayed(longPressRunnable, 500);    //同时延长500启动长按后处理的逻辑Runnable
+                } else if (button_state == BUTTON_STATE_ONLY_RECORDER) {
+                    post(longPressRunnable);
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (captureLisenter != null
@@ -245,7 +248,7 @@ public class CaptureButton extends View {
     //内外圆动画
     private void startRecordAnimation(float outside_start, float outside_end, float inside_start, float inside_end) {
         ValueAnimator outside_anim = ValueAnimator.ofFloat(outside_start, outside_end);
-        ValueAnimator inside_anim = ValueAnimator.ofFloat(inside_start, inside_end);
+        ValueAnimator inside_anim  = ValueAnimator.ofFloat(inside_start, inside_end);
         //外圆动画监听
         outside_anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

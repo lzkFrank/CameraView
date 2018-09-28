@@ -46,51 +46,51 @@ import java.io.IOException;
  */
 public class JCameraView extends FrameLayout implements CameraInterface.CameraOpenOverCallback, SurfaceHolder
         .Callback, CameraView {
-//    private static final String TAG = "JCameraView";
+    //    private static final String TAG = "JCameraView";
 
     //Camera状态机
     private CameraMachine machine;
 
     //闪关灯状态
     private static final int TYPE_FLASH_AUTO = 0x021;
-    private static final int TYPE_FLASH_ON = 0x022;
-    private static final int TYPE_FLASH_OFF = 0x023;
-    private int type_flash = TYPE_FLASH_OFF;
+    private static final int TYPE_FLASH_ON   = 0x022;
+    private static final int TYPE_FLASH_OFF  = 0x023;
+    private              int type_flash      = TYPE_FLASH_OFF;
 
     //拍照浏览时候的类型
     public static final int TYPE_PICTURE = 0x001;
-    public static final int TYPE_VIDEO = 0x002;
-    public static final int TYPE_SHORT = 0x003;
+    public static final int TYPE_VIDEO   = 0x002;
+    public static final int TYPE_SHORT   = 0x003;
     public static final int TYPE_DEFAULT = 0x004;
 
     //录制视频比特率
-    public static final int MEDIA_QUALITY_HIGH = 20 * 100000;
-    public static final int MEDIA_QUALITY_MIDDLE = 16 * 100000;
-    public static final int MEDIA_QUALITY_LOW = 12 * 100000;
-    public static final int MEDIA_QUALITY_POOR = 8 * 100000;
-    public static final int MEDIA_QUALITY_FUNNY = 4 * 100000;
+    public static final int MEDIA_QUALITY_HIGH    = 20 * 100000;
+    public static final int MEDIA_QUALITY_MIDDLE  = 16 * 100000;
+    public static final int MEDIA_QUALITY_LOW     = 12 * 100000;
+    public static final int MEDIA_QUALITY_POOR    = 8 * 100000;
+    public static final int MEDIA_QUALITY_FUNNY   = 4 * 100000;
     public static final int MEDIA_QUALITY_DESPAIR = 2 * 100000;
-    public static final int MEDIA_QUALITY_SORRY = 1 * 80000;
+    public static final int MEDIA_QUALITY_SORRY   = 1 * 80000;
 
 
-    public static final int BUTTON_STATE_ONLY_CAPTURE = 0x101;      //只能拍照
+    public static final int BUTTON_STATE_ONLY_CAPTURE  = 0x101;      //只能拍照
     public static final int BUTTON_STATE_ONLY_RECORDER = 0x102;     //只能录像
-    public static final int BUTTON_STATE_BOTH = 0x103;              //两者都可以
+    public static final int BUTTON_STATE_BOTH          = 0x103;              //两者都可以
 
 
     //回调监听
     private JCameraListener jCameraLisenter;
-    private ClickListener leftClickListener;
-    private ClickListener rightClickListener;
+    private ClickListener   leftClickListener;
+    private ClickListener   rightClickListener;
 
-    private Context mContext;
-    private VideoView mVideoView;
-    private ImageView mPhoto;
-    private ImageView mSwitchCamera;
-    private ImageView mFlashLamp;
+    private Context       mContext;
+    private VideoView     mVideoView;
+    private ImageView     mPhoto;
+    private ImageView     mSwitchCamera;//摄像头转换按钮
+    private ImageView     mFlashLamp;
     private CaptureLayout mCaptureLayout;
-    private FoucsView mFoucsView;
-    private MediaPlayer mMediaPlayer;
+    private FoucsView     mFoucsView;
+    private MediaPlayer   mMediaPlayer;
 
     private int layout_width;
     private float screenProp = 0f;
@@ -101,18 +101,18 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
 
     //切换摄像头按钮的参数
-    private int iconSize = 0;       //图标大小
+    private int iconSize   = 0;       //图标大小
     private int iconMargin = 0;     //右上边距
-    private int iconSrc = 0;        //图标资源
-    private int iconLeft = 0;       //左图标
-    private int iconRight = 0;      //右图标
-    private int duration = 0;       //录制时间
+    private int iconSrc    = 0;        //图标资源
+    private int iconLeft   = 0;       //左图标
+    private int iconRight  = 0;      //右图标
+    private int duration   = 0;       //录制时间
 
     //缩放梯度
     private int zoomGradient = 0;
 
-    private boolean firstTouch = true;
-    private float firstTouchLength = 0;
+    private boolean firstTouch       = true;
+    private float   firstTouchLength = 0;
 
     public JCameraView(Context context) {
         this(context, null);
@@ -238,14 +238,14 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
             }
         });
         //退出
-//        mCaptureLayout.setReturnLisenter(new ReturnListener() {
-//            @Override
-//            public void onReturn() {
-//                if (jCameraLisenter != null) {
-//                    jCameraLisenter.quit();
-//                }
-//            }
-//        });
+        //        mCaptureLayout.setReturnLisenter(new ReturnListener() {
+        //            @Override
+        //            public void onReturn() {
+        //                if (jCameraLisenter != null) {
+        //                    jCameraLisenter.quit();
+        //                }
+        //            }
+        //        });
         mCaptureLayout.setLeftClickListener(new ClickListener() {
             @Override
             public void onClick() {
@@ -267,7 +267,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        float widthSize = mVideoView.getMeasuredWidth();
+        float widthSize  = mVideoView.getMeasuredWidth();
         float heightSize = mVideoView.getMeasuredHeight();
         if (screenProp == 0) {
             screenProp = heightSize / widthSize;
@@ -355,7 +355,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
                         firstTouch = true;
                         machine.zoom(result - firstTouchLength, CameraInterface.TYPE_CAPTURE);
                     }
-//                    Log.i("CJT", "result = " + (result - firstTouchLength));
+                    //                    Log.i("CJT", "result = " + (result - firstTouchLength));
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -378,7 +378,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     private void updateVideoViewSize(float videoWidth, float videoHeight) {
         if (videoWidth > videoHeight) {
             LayoutParams videoViewParam;
-            int height = (int) ((videoHeight / videoWidth) * getWidth());
+            int          height = (int) ((videoHeight / videoWidth) * getWidth());
             videoViewParam = new LayoutParams(LayoutParams.MATCH_PARENT, height);
             videoViewParam.gravity = Gravity.CENTER;
             mVideoView.setLayoutParams(videoViewParam);
@@ -562,10 +562,10 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
         }
         mFoucsView.setX(x - mFoucsView.getWidth() / 2);
         mFoucsView.setY(y - mFoucsView.getHeight() / 2);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(mFoucsView, "scaleX", 1, 0.6f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(mFoucsView, "scaleY", 1, 0.6f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(mFoucsView, "alpha", 1f, 0.4f, 1f, 0.4f, 1f, 0.4f, 1f);
-        AnimatorSet animSet = new AnimatorSet();
+        ObjectAnimator scaleX  = ObjectAnimator.ofFloat(mFoucsView, "scaleX", 1, 0.6f);
+        ObjectAnimator scaleY  = ObjectAnimator.ofFloat(mFoucsView, "scaleY", 1, 0.6f);
+        ObjectAnimator alpha   = ObjectAnimator.ofFloat(mFoucsView, "alpha", 1f, 0.4f, 1f, 0.4f, 1f, 0.4f, 1f);
+        AnimatorSet    animSet = new AnimatorSet();
         animSet.play(scaleX).with(scaleY).before(alpha);
         animSet.setDuration(400);
         animSet.start();

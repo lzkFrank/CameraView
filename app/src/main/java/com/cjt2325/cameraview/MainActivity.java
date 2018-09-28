@@ -15,11 +15,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.cjt2325.cameralibrary.JCameraView;
-import com.cjt2325.cameralibrary.lisenter.JCameraLisenter;
+import com.cjt2325.cameralibrary.listener.JCameraListener;
 
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     private final int GET_PERMISSION_REQUEST = 100; //权限申请自定义码
     private JCameraView jCameraView;
     private boolean granted = false;
@@ -30,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         jCameraView = (JCameraView) findViewById(R.id.jcameraview);
-
+        jCameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_RECORDER);
         //设置视频保存路径
         jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + File.separator + "JCamera");
 
         //JCameraView监听
-        jCameraView.setJCameraLisenter(new JCameraLisenter() {
+        jCameraView.setJCameraLisenter(new JCameraListener() {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
@@ -44,14 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void recordSuccess(String url, Bitmap firstFrame) {
-
-            }
-
-
-            @Override
-            public void quit() {
-                //退出按钮
-                MainActivity.this.finish();
+                Log.i(TAG, "recordSuccess: "+url);
             }
         });
         //6.0动态权限获取
@@ -73,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         } else {
             View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            int  option    = View.SYSTEM_UI_FLAG_FULLSCREEN;
             decorView.setSystemUiVisibility(option);
         }
     }
@@ -127,13 +121,13 @@ public class MainActivity extends AppCompatActivity {
                     size++;
                 }
                 //录音权限
-                int recordPermissionResult = grantResults[1];
+                int     recordPermissionResult  = grantResults[1];
                 boolean recordPermissionGranted = recordPermissionResult == PackageManager.PERMISSION_GRANTED;
                 if (!recordPermissionGranted) {
                     size++;
                 }
                 //相机权限
-                int cameraPermissionResult = grantResults[2];
+                int     cameraPermissionResult  = grantResults[2];
                 boolean cameraPermissionGranted = cameraPermissionResult == PackageManager.PERMISSION_GRANTED;
                 if (!cameraPermissionGranted) {
                     size++;
@@ -141,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 if (size == 0) {
                     granted = true;
                     jCameraView.onResume();
-                }else{
+                } else {
                     Toast.makeText(this, "请到设置-权限管理中开启", Toast.LENGTH_SHORT).show();
                     finish();
                 }
